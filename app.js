@@ -1,14 +1,16 @@
 'use strict';
 
-const CANVAS_WIDTH = 2048;
+const CANVAS_WIDTH = 1024;
 const CANVAS_HEIGHT = 1024;
 const NUM_CELLS_WIDE = 512;
-const NUM_CELLS_HIGH = 256;
+const NUM_CELLS_HIGH = 512;
 const CELL_COLOR_ON = 'green';
 const CELL_COLOR_OFF = 'grey';
 
 const CELL_WIDTH = CANVAS_WIDTH / NUM_CELLS_WIDE;
 const CELL_HEIGHT = CANVAS_HEIGHT / NUM_CELLS_HIGH;
+
+const ACTUAL_SIEVE_MODE = true;
 
 (() => {
   const canvas = document.getElementById('canvas');
@@ -54,18 +56,37 @@ const CELL_HEIGHT = CANVAS_HEIGHT / NUM_CELLS_HIGH;
 
     const color = grid[column][row] ? CELL_COLOR_ON : CELL_COLOR_OFF;
     paintCell(column, row, color);
-
-    //console.log('flipped cell at ' + column + ', ' + row + ' to ' + grid[column][row]);
   }
+
+  /*
+   * Interesting:
+   *
+   * 1.
+   *   row = n - 1
+   *   col = n - 1
+   *
+   * 2.
+   *   row = n - 1
+   *   col = 0
+   *
+   * 3.
+   *   row = 0
+   *   col = 0
+   *
+   * 4. (This one is the idea)
+   *   row = 0
+   *   col = n - 1
+   *
+   */
 
   const namethisfunction = n => {
     let goingUp = true;
-    let row = n;
+    let row = 0;
 
-    for (let col = 0; col < grid.length; col++) {
+    for (let col = n - 1; col < grid.length; col++) {
       flipAndPaintCell(col, row);
 
-      if (goingUp && row == n) {
+      if (goingUp && row == n - 1) {
         goingUp = false;
       }
 
@@ -84,7 +105,7 @@ const CELL_HEIGHT = CANVAS_HEIGHT / NUM_CELLS_HIGH;
 
   paintAllCells(CELL_COLOR_OFF);
 
-  const MAX_NUM = 128;
+  const MAX_NUM = NUM_CELLS_HIGH;
 
   // TODO - try this with iteration just increasing the timeout.
   const animate = step => {
@@ -92,12 +113,10 @@ const CELL_HEIGHT = CANVAS_HEIGHT / NUM_CELLS_HIGH;
       return;
     }
 
-    //console.log(step);
-
     namethisfunction(step);
     setTimeout(animate, 20, step + 1);
   }
 
-  animate(1);
+  animate(2);
 
 })();
