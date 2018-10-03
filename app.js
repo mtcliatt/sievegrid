@@ -1,14 +1,47 @@
 'use strict';
 
-const CANVAS_WIDTH = 1024;
-const CANVAS_HEIGHT = 1024;
-const NUM_CELLS_WIDE = 512;
-const NUM_CELLS_HIGH = 512;
+const CANVAS_WIDTH = 2048;
+const CANVAS_HEIGHT = 2048;
+
+//const NUM_CELLS_WIDE = 128;
+//const NUM_CELLS_HIGH = 128;
+
+const CELL_WIDTH = 2;
+const CELL_HEIGHT = 2;
+const NUM_CELLS_WIDE = CANVAS_WIDTH / CELL_WIDTH;
+const NUM_CELLS_HIGH = CANVAS_HEIGHT / CELL_HEIGHT;
+
 const CELL_COLOR_ON = 'green';
 const CELL_COLOR_OFF = 'grey';
 
-const CELL_WIDTH = CANVAS_WIDTH / NUM_CELLS_WIDE;
-const CELL_HEIGHT = CANVAS_HEIGHT / NUM_CELLS_HIGH;
+/* *
+const COLORS = ['grey', 'green'];
+/* */
+
+/* */
+const COLORS = [
+  'rgb(0, 0, 0)',
+  'rgb(16, 16, 16)',
+  'rgb(32, 32, 32)',
+  'rgb(48, 48, 48)',
+  'rgb(64, 64, 64)',
+  'rgb(80, 80, 80)',
+  'rgb(96, 96, 96)',
+  'rgb(112, 112, 112)',
+  'rgb(128, 128, 128)',
+  'rgb(144, 144, 144)',
+  'rgb(160, 160, 160)',
+  'rgb(176, 176, 176)',
+  'rgb(192, 192, 192)',
+  'rgb(208, 208, 208)',
+  'rgb(224, 224, 224)',
+  'rgb(240, 240, 240)',
+  'rgb(256, 256, 256)',
+];
+/* */
+
+//const CELL_WIDTH = CANVAS_WIDTH / NUM_CELLS_WIDE;
+//const CELL_HEIGHT = CANVAS_HEIGHT / NUM_CELLS_HIGH;
 
 const ACTUAL_SIEVE_MODE = true;
 
@@ -22,9 +55,21 @@ const ACTUAL_SIEVE_MODE = true;
   for (let i = 0; i < NUM_CELLS_WIDE; i++) {
     grid.push([]);
     for (let j = 0; j < NUM_CELLS_HIGH; j++) {
-      grid[i].push(false);
+      grid[i].push(0);
     }
   }
+
+  const queue = [];
+  const executeNextTask = () => {
+    const next = queue.shift();
+    paintCell(next[0], next[1], next[2])
+  }
+
+  const getColor = (column, row) => {
+    const colorIndex = Math.min(grid[column][row], COLORS.length - 1);
+    return COLORS[colorIndex];
+  };
+
 
   // Converts the column, row coordinates to pixel coordinates on the canvas.
   const cellCoordinateToCanvasCoordinate = (column, row) => {
@@ -42,7 +87,7 @@ const ACTUAL_SIEVE_MODE = true;
   }
 
   // Wrapper to call paintCell on each cell.
-  const paintAllCells = (color) => {
+  const paintAllCells = color => {
     for (let i = 0; i < NUM_CELLS_WIDE; i++) {
       for (let j = 0; j < NUM_CELLS_HIGH; j++) {
         paintCell(i, j, color);
@@ -52,10 +97,16 @@ const ACTUAL_SIEVE_MODE = true;
 
   // Paints the specified cell with the color for its opposite state.
   const flipAndPaintCell = (column, row) => {
-    grid[column][row] = !grid[column][row];
+    //grid[column][row] = !grid[column][row];
+    grid[column][row]++;
 
-    const color = grid[column][row] ? CELL_COLOR_ON : CELL_COLOR_OFF;
+    //const color = grid[column][row] ? CELL_COLOR_ON : CELL_COLOR_OFF;
+    const color = getColor(column, row);
+
+    // To paint rows at a time:
     paintCell(column, row, color);
+    // To paint cells at a time:
+    //queue.push([column, row, color]);
   }
 
   /*
@@ -103,11 +154,17 @@ const ACTUAL_SIEVE_MODE = true;
     }
   }
 
-  paintAllCells(CELL_COLOR_OFF);
+  //paintAllCells(CELL_COLOR_OFF);
+  paintAllCells('black');
 
   const MAX_NUM = NUM_CELLS_HIGH;
+  //const MAX_NUM = 32;
 
-  // TODO - try this with iteration just increasing the timeout.
+  for (let i = 2; i < MAX_NUM; i++) {
+    namethisfunction(i);
+  }
+
+  /* */
   const animate = step => {
     if (step == MAX_NUM) {
       return;
@@ -118,5 +175,11 @@ const ACTUAL_SIEVE_MODE = true;
   }
 
   animate(2);
+  /* */
+
+
+  /* *
+  setInterval(executeNextTask, 1);
+  /* */
 
 })();
