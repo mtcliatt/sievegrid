@@ -1,24 +1,24 @@
 'use strict';
 
-const CANVAS_WIDTH = 2048;
-const CANVAS_HEIGHT = 2048;
+const CANVAS_WIDTH = 4096;
+const CANVAS_HEIGHT = 4096;
 
 //const NUM_CELLS_WIDE = 128;
 //const NUM_CELLS_HIGH = 128;
 
-const CELL_WIDTH = 2;
-const CELL_HEIGHT = 2;
+const CELL_WIDTH = 4
+const CELL_HEIGHT = 4;
 const NUM_CELLS_WIDE = CANVAS_WIDTH / CELL_WIDTH;
 const NUM_CELLS_HIGH = CANVAS_HEIGHT / CELL_HEIGHT;
 
 const CELL_COLOR_ON = 'green';
 const CELL_COLOR_OFF = 'grey';
 
-/* *
+/* */
 const COLORS = ['grey', 'green'];
 /* */
 
-/* */
+/* *
 const COLORS = [
   'rgb(0, 0, 0)',
   'rgb(16, 16, 16)',
@@ -66,7 +66,9 @@ const ACTUAL_SIEVE_MODE = true;
   }
 
   const getColor = (column, row) => {
-    const colorIndex = Math.min(grid[column][row], COLORS.length - 1);
+    //const colorIndex = Math.min(grid[column][row], COLORS.length - 1);
+
+    const colorIndex = grid[column][row] % 2;
     return COLORS[colorIndex];
   };
 
