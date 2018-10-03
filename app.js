@@ -1,9 +1,9 @@
 'use strict';
 
-const CANVAS_WIDTH = 1024;
+const CANVAS_WIDTH = 2048;
 const CANVAS_HEIGHT = 1024;
 const NUM_CELLS_WIDE = 512;
-const NUM_CELLS_HIGH = 512;
+const NUM_CELLS_HIGH = 256;
 const CELL_COLOR_ON = 'green';
 const CELL_COLOR_OFF = 'grey';
 
@@ -40,10 +40,10 @@ const CELL_HEIGHT = CANVAS_HEIGHT / NUM_CELLS_HIGH;
   }
 
   // Wrapper to call paintCell on each cell.
-  const paintAllCells = () => {
+  const paintAllCells = (color) => {
     for (let i = 0; i < NUM_CELLS_WIDE; i++) {
       for (let j = 0; j < NUM_CELLS_HIGH; j++) {
-        paintCell(i, j);
+        paintCell(i, j, color);
       }
     }
   }
@@ -82,10 +82,9 @@ const CELL_HEIGHT = CANVAS_HEIGHT / NUM_CELLS_HIGH;
     }
   }
 
-  // Start off with one cell on, front and center.
-  flipAndPaintCell(20, 10);
+  paintAllCells(CELL_COLOR_OFF);
 
-  const MAX_NUM = 512;
+  const MAX_NUM = 128;
 
   // TODO - try this with iteration just increasing the timeout.
   const animate = step => {
