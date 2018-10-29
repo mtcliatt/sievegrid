@@ -134,11 +134,20 @@ const ACTUAL_SIEVE_MODE = true;
 
   const namethisfunction = n => {
     let goingUp = true;
-    let row = 0;
+    let row = n - 1;
 
     for (let col = n - 1; col < grid.length; col++) {
-      flipAndPaintCell(col, row);
+      flipAndPaintCell(col, --row);
 
+      if (row == 0) {
+        for (let tr = 0; tr < n; tr++) {
+          flipAndPaintCell(col, tr);
+        }
+        row = n - 1;
+      }
+
+
+      /*
       if (goingUp && row == n - 1) {
         goingUp = false;
       }
@@ -152,6 +161,7 @@ const ACTUAL_SIEVE_MODE = true;
       } else {
         row--;
       }
+      */
 
     }
   }
@@ -162,9 +172,11 @@ const ACTUAL_SIEVE_MODE = true;
   const MAX_NUM = NUM_CELLS_HIGH;
   //const MAX_NUM = 32;
 
+  /*
   for (let i = 2; i < MAX_NUM; i++) {
     namethisfunction(i);
   }
+  */
 
   /* */
   const animate = step => {
@@ -173,10 +185,10 @@ const ACTUAL_SIEVE_MODE = true;
     }
 
     namethisfunction(step);
-    setTimeout(animate, 20, step + 1);
+    setTimeout(animate, 50, step + 1);
   }
 
-  animate(2);
+  animate(3);
   /* */
 
 
